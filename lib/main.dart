@@ -9,25 +9,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: ListPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
+// 一覧画面
+class ListPage extends StatefulWidget {
+  ListPage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ListPageState createState() => _ListPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ListPageState extends State<ListPage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -40,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("一覧画面"),
       ),
       body: Center(
         child: Column(
@@ -64,3 +63,19 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+// 再生画面
+class PlayerPage extends StatefulWidget {
+  @override
+  _PlayerPageState createState() => _PlayerPageState();
+}
+
+class _PlayerPageState extends State<PlayerPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+// 一覧表示アイテム
+class _VideoListItem {}
