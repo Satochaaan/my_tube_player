@@ -6,7 +6,7 @@ class Items {
   Items(this.items);
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class Item {
   String kind;
   String etag;
@@ -45,6 +45,7 @@ class Snippet {
   String title;
   String description;
   String channelTitle;
+  Thumbnails thumbnails;
 
   Snippet({
     this.publishedAt,
@@ -55,7 +56,7 @@ class Snippet {
   });
 }
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class Thumbnails {
   @JsonKey(name: 'default')
   Thumbnail defaultThumbnail;
