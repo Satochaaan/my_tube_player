@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
 
 // 一覧画面
 class ListPage extends StatefulWidget {
-  ListPage({Key key}) : super(key: key);
+  ListPage({Key? key}) : super(key: key);
 
   @override
   _ListPageState createState() => _ListPageState();
