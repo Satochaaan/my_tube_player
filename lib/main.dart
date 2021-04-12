@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'model.dart';
 
 void main() {
   runApp(MyApp());
@@ -79,3 +84,25 @@ class _PlayerPageState extends State<PlayerPage> {
 
 // 一覧表示アイテム
 class _VideoListItem {}
+
+// Youtube検索API実行
+Future<Items?>? searchYoutube(String word) async {
+  final param = {
+    'part': 'snippet',
+    'type': 'video',
+    'q': word,
+    'key': 'api_key', // 自分のAPIキーを使用
+  };
+  final uri = Uri.https('www.googleapis.com', 'youtube/v3/search', param);
+  final response = await http.get(uri);
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> decodedJson = jsonDecode(response.body);
+    Items items = Items.fromJson(decodedJson['Items']);
+    print(items);
+
+    return items;
+  } else {
+    return null;
+  }
+}
