@@ -32,11 +32,18 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  int _counter = 0;
+  Items? _searchResults = Items();
 
-  void _incrementCounter() {
+  void _search(String searchWord) async {
+    Items? result = Items();
+    try {
+      result = await searchYoutube(searchWord);
+    } catch (e) {
+      print(e.toString());
+    }
+
     setState(() {
-      _counter++;
+      _searchResults = result;
     });
   }
 
@@ -46,24 +53,47 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(
         title: Text("一覧画面"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextField(
+              onSubmitted: (String? searchWord) {
+                _search(searchWord != null ? searchWord : '');
+              },
+              decoration: const InputDecoration(
+                hintText: 'Search',
+                filled: true,
+                fillColor: Colors.white,
+                prefixIcon: Icon(Icons.search),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15.0),
+                  ),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.white,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15.0),
+                  ),
+                  borderSide: BorderSide(
+                    width: 0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+          ),
+          Text(
+            (_searchResults!.items != null
+                ? _searchResults!.items!.first.snippet!.title
+                : 'nothing')!,
+          ),
+        ],
       ),
     );
   }
@@ -83,7 +113,14 @@ class _PlayerPageState extends State<PlayerPage> {
 }
 
 // 一覧表示アイテム
-class _VideoListItem {}
+class VideoListCard extends StatelessWidget {
+  late final Item item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 // Youtube検索API実行
 Future<Items?>? searchYoutube(String word) async {
@@ -98,7 +135,7 @@ Future<Items?>? searchYoutube(String word) async {
 
   if (response.statusCode == 200) {
     Map<String, dynamic> decodedJson = jsonDecode(response.body);
-    Items items = Items.fromJson(decodedJson['Items']);
+    Items items = Items.fromJson(decodedJson);
     print(items);
 
     return items;

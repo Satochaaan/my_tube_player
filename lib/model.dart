@@ -93,8 +93,8 @@ class Thumbnails {
 @JsonSerializable(createToJson: false)
 class Thumbnail {
   String? url;
-  String? width;
-  String? height;
+  int? width;
+  int? height;
 
   // コンストラクタ
   Thumbnail({this.url, this.width, this.height});

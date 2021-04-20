@@ -65,6 +65,6 @@ Thumbnails _$ThumbnailsFromJson(Map<String, dynamic> json) {
 Thumbnail _$ThumbnailFromJson(Map<String, dynamic> json) {
   return Thumbnail()
     ..url = json['url'] as String?
-    ..width = json['width'] as String?
-    ..height = json['height'] as String?;
+    ..width = json['width'] as int?
+    ..height = json['height'] as int?;
 }
