@@ -38,6 +38,9 @@ class _ListPageState extends State<ListPage> {
     Items? result = Items();
     try {
       result = await searchYoutube(searchWord);
+      if (result!.items != null) {
+        result.items = result.items!.whereType<Item>().toList();
+      }
     } catch (e) {
       print(e.toString());
     }
@@ -45,6 +48,12 @@ class _ListPageState extends State<ListPage> {
     setState(() {
       _searchResults = result;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _search('ニュース');
   }
 
   @override
@@ -88,10 +97,14 @@ class _ListPageState extends State<ListPage> {
               ),
             ),
           ),
-          Text(
-            (_searchResults!.items != null
-                ? _searchResults!.items!.first.snippet!.title
-                : 'nothing')!,
+          Expanded(
+            child: ListView(
+              children: _searchResults!.items!.map((item) {
+                return VideoListItem(
+                  item: item,
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),
@@ -113,12 +126,31 @@ class _PlayerPageState extends State<PlayerPage> {
 }
 
 // 一覧表示アイテム
-class VideoListCard extends StatelessWidget {
+class VideoListItem extends StatelessWidget {
   late final Item item;
+
+  VideoListItem({
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Image.network(item.snippet!.thumbnails!.defaultThumbnail!.url!),
+          Text(
+            item.snippet!.title!,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(item.snippet!.channelTitle!),
+        ],
+      ),
+    );
   }
 }
 
