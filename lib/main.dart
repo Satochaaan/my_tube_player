@@ -32,7 +32,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  Items? _searchResults = Items();
+  Items _searchResults = Items();
 
   void _search(String searchWord) async {
     Items? result = Items();
@@ -46,7 +46,7 @@ class _ListPageState extends State<ListPage> {
     }
 
     setState(() {
-      _searchResults = result;
+      _searchResults = result != null ? result : Items();
     });
   }
 
@@ -98,13 +98,17 @@ class _ListPageState extends State<ListPage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              children: _searchResults!.items!.map((item) {
-                return VideoListItem(
-                  item: item,
-                );
-              }).toList(),
-            ),
+            child: _searchResults.items != null
+                ? ListView(
+                    children: _searchResults.items!.map((item) {
+                      return VideoListItem(
+                        item: item,
+                      );
+                    }).toList(),
+                  )
+                : Container(
+                    child: Text('nothing'),
+                  ),
           ),
         ],
       ),
@@ -136,18 +140,34 @@ class VideoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Image.network(item.snippet!.thumbnails!.defaultThumbnail!.url!),
-          Text(
-            item.snippet!.title!,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  item.snippet!.title!,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  item.snippet!.channelTitle!,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(item.snippet!.channelTitle!),
         ],
       ),
     );
@@ -160,6 +180,7 @@ Future<Items?>? searchYoutube(String word) async {
     'part': 'snippet',
     'type': 'video',
     'q': word,
+    'maxResults': '20',
     'key': 'api_key', // 自分のAPIキーを使用
   };
   final uri = Uri.https('www.googleapis.com', 'youtube/v3/search', param);
