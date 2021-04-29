@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_tube_player_app/play.dart';
 
 import 'model.dart';
 
@@ -139,36 +140,46 @@ class VideoListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Image.network(item.snippet!.thumbnails!.defaultThumbnail!.url!),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  item.snippet!.title!,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  item.snippet!.channelTitle!,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) =>
+                VideoPlayer(videoTitle: 'videoTitle', videoId: 'videoId'),
           ),
-        ],
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Image.network(item.snippet!.thumbnails!.defaultThumbnail!.url!),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    item.snippet!.title!,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    item.snippet!.channelTitle!,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -189,7 +200,7 @@ Future<Items?>? searchYoutube(String word) async {
   if (response.statusCode == 200) {
     Map<String, dynamic> decodedJson = jsonDecode(response.body);
     Items items = Items.fromJson(decodedJson);
-    print(items);
+    print(items.items!.first.id!.videoId.toString());
 
     return items;
   } else {
