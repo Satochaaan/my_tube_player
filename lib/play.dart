@@ -1,5 +1,7 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class VideoPlayer extends StatefulWidget {
   VideoPlayer({Key? key, required this.videoTitle, required this.videoId})
@@ -13,16 +15,27 @@ class VideoPlayer extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<VideoPlayer> {
-  // VideoPlayerController _videoPlayerController;
-  // ChewieController _chewieController;
+  late VideoPlayerController _videoPlayerController;
+  late ChewieController _chewieController;
+  final String youtubeUrl = 'https://www.youtube.com/watch?v=';
 
   @override
   void initState() {
     super.initState();
+    _videoPlayerController =
+        VideoPlayerController.network(youtubeUrl + widget.videoId);
+    _chewieController = ChewieController(
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: 3 / 2,
+      autoPlay: false,
+      looping: true,
+    );
   }
 
   @override
   void dispose() {
+    _videoPlayerController.dispose();
+    _chewieController.dispose();
     super.dispose();
   }
 
@@ -33,8 +46,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
         // leading: Icon(Icons.arrow_back_outlined),
         title: Text(widget.videoTitle),
       ),
-      body: Center(
-        child: Text('再生画面'),
+      body: Chewie(
+        controller: _chewieController,
       ),
     );
   }

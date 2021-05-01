@@ -144,8 +144,8 @@ class VideoListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) =>
-                VideoPlayer(videoTitle: 'videoTitle', videoId: 'videoId'),
+            builder: (context) => VideoPlayer(
+                videoTitle: item.snippet!.title!, videoId: item.id!.videoId!),
           ),
         );
       },
