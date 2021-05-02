@@ -1,7 +1,6 @@
-import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayer extends StatefulWidget {
   VideoPlayer({Key? key, required this.videoTitle, required this.videoId})
@@ -15,28 +14,24 @@ class VideoPlayer extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<VideoPlayer> {
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
-  final String youtubeUrl = 'https://www.youtube.com/watch?v=';
+  late YoutubePlayerController _youtubePlayerController;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.network(youtubeUrl + widget.videoId);
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      aspectRatio: 3 / 2,
-      autoPlay: false,
-      looping: true,
+    _youtubePlayerController = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: YoutubePlayerFlags(
+        mute: false,
+        autoPlay: true,
+      ),
     );
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
     super.dispose();
+    _youtubePlayerController.dispose();
   }
 
   @override
@@ -46,8 +41,19 @@ class _VideoPlayerState extends State<VideoPlayer> {
         // leading: Icon(Icons.arrow_back_outlined),
         title: Text(widget.videoTitle),
       ),
-      body: Chewie(
-        controller: _chewieController,
+      body: Center(
+        child: YoutubePlayer(
+          controller: _youtubePlayerController,
+          showVideoProgressIndicator: true,
+          progressIndicatorColor: Colors.amber,
+          progressColors: ProgressBarColors(
+            playedColor: Colors.amber,
+            handleColor: Colors.amberAccent,
+          ),
+          onReady: () {
+            print('Player is ready.');
+          },
+        ),
       ),
     );
   }
