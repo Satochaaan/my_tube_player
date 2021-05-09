@@ -39,8 +39,8 @@ class _ListPageState extends State<ListPage> {
     Items? result = Items();
     try {
       result = await searchYoutube(searchWord);
-      if (result!.items != null) {
-        result.items = result.items!.whereType<Item>().toList();
+      if (result?.items != null) {
+        result?.items = result.items!.whereType<Item>().toList();
       }
     } catch (e) {
       print(e.toString());
@@ -145,7 +145,7 @@ class VideoListItem extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => VideoPlayer(
-                videoTitle: item.snippet!.title!, videoId: item.id!.videoId!),
+                videoTitle: item.snippet?.title, videoId: item.id?.videoId),
           ),
         );
       },
@@ -204,6 +204,6 @@ Future<Items?>? searchYoutube(String word) async {
 
     return items;
   } else {
-    return null;
+    throw Exception('Failed to get the video.');
   }
 }

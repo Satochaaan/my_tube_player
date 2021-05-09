@@ -6,8 +6,8 @@ class VideoPlayer extends StatefulWidget {
   VideoPlayer({Key? key, required this.videoTitle, required this.videoId})
       : super(key: key);
 
-  final String videoTitle;
-  final String videoId;
+  final String? videoTitle;
+  final String? videoId;
 
   @override
   _VideoPlayerState createState() => _VideoPlayerState();
@@ -20,7 +20,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     super.initState();
     _youtubePlayerController = YoutubePlayerController(
-      initialVideoId: widget.videoId,
+      initialVideoId: widget.videoId ?? '',
       flags: YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
@@ -39,7 +39,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     return Scaffold(
       appBar: AppBar(
         // leading: Icon(Icons.arrow_back_outlined),
-        title: Text(widget.videoTitle),
+        title: Text(widget.videoTitle ?? 'nonTitle'),
       ),
       body: Center(
         child: YoutubePlayer(
